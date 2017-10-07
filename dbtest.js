@@ -13,14 +13,27 @@ var hwsensorUrl = ('http://192.168.2.245/poffertjespan/get-sensors');
 setInterval(() => { //http request versturen en de temperatuur uit de response halen
   axios.get(hwsensorUrl).then((response) => {
     console.log(response.data.response.thermometers[0].te);
+    MongoClient.connect('mongodb://localhost:27017/HomeWizard', (err, db) => { //verbinding maken met de database
+        if(err) {
+          return console.log('Foutje'); //als dat niet lukt, foutmelding tonen
+        }
+
+      console.log('verbonden met de database'); //lukt het wel, dan succes melden
+      
+      db.collection('homewizard').insertOne({
+        temp: response.data.response.thermometers[0].te,
+        time: response.data.response.time
+      })
+      db.close();
+    });
   });
 
-  MongoClient.connect('mongodb://localhost:27017/HomeWizard', (err, db) => { //verbinding maken met de database
-      if(err) {
-        return console.log('Foutje'); //als dat niet lukt, foutmelding tonen
-      }
-    console.log('verbonden met de database'); //lukt het wel, dan succes melden
-  });
+  // MongoClient.connect('mongodb://localhost:27017/HomeWizard', (err, db) => { //verbinding maken met de database
+  //     if(err) {
+  //       return console.log('Foutje'); //als dat niet lukt, foutmelding tonen
+  //     }
+  //   console.log('verbonden met de database'); //lukt het wel, dan succes melden
+  // });
 
   //Hier komt de code die de waarde naar de database gaat schrijven
 
