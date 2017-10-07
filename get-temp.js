@@ -13,7 +13,10 @@ var getTemp = (a, b, callback) => {
       // console.log('foutje');
       callback(error);
     } else if(response.statusCode === 200) {
-      callback(undefined, body.currently.temperature);
+      callback(undefined,{
+        temp:body.currently.temperature,
+        time: new Date()
+      });
     }
   });
 };
