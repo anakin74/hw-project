@@ -1,4 +1,4 @@
-//app om iets met de homewizard te doen
+//file to connect to homewizard and fetch inside temperature
 
 const express = require('express');
 const axios = require('axios');
